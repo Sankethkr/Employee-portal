@@ -15,7 +15,7 @@ const {
     try {
       const params = {
         TableName: process.env.DYNAMODB_TABLE_NAME,
-        Key: marshall({ empId: event.pathParameters.empId }),
+        Key: marshall({ email: event.pathParameters.email }),
       };
       const { Item } = await client.send(new GetItemCommand(params));
       response.body = JSON.stringify({
@@ -34,7 +34,7 @@ const {
     }
     return response;
   };
-  
+
   const createEmployee = async (event) => {
     const response = { statusCode: 200 };
     try {
@@ -59,7 +59,7 @@ const {
     }
     return response;
   };
-  
+
   const updateEmployee = async (event) => {
     const response = { statusCode: 200 };
     try {
@@ -67,7 +67,7 @@ const {
       const objKeys = Object.keys(body);
       const params = {
         TableName: process.env.DYNAMODB_TABLE_NAME,
-        Key: marshall({ empId: event.pathParameters.empId }),
+        Key: marshall({ email: event.pathParameters.email }),
         UpdateExpression: `SET ${objKeys
           .map((_, index) => `#key${index} = :value${index}`)
           .join(', ')}`,
@@ -104,13 +104,13 @@ const {
     }
     return response;
   };
-  
+
   const deleteEmployee = async (event) => {
     const response = { statusCode: 200 };
     try {
       const params = {
         TableName: process.env.DYNAMODB_TABLE_NAME,
-        Key: marshall({ empId: event.pathParameters.empId }),
+        Key: marshall({ email: event.pathParameters.email }),
       };
       const deleteResult = await client.send(new DeleteItemCommand(params));
       response.body = JSON.stringify({

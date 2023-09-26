@@ -5,9 +5,9 @@ provider:
   stage: dev
   region: ap-south-1
   environment:
-    DYNAMODB_TABLE_NAME: ${self:custom.postsTableName}
+    DYNAMODB_TABLE_NAME: employee-Table
 custom:
-  postsTableName: posts-table-${self:provider.stage}
+  # employee-TableName: posts-table-${self:provider.stage}
 plugins:
   - serverless-iam-roles-per-function
 functions:
@@ -24,7 +24,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:GetItem"
-        Resource: !GetAtt PostsTable.Arn
+        Resource: !GetAtt employee-Table.Arn
   createEmployee:
     handler: api.createEmployee
     name: create-post
@@ -38,7 +38,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:PutItem"
-        Resource: !GetAtt PostsTable.Arn
+        Resource: !GetAtt employee-Table.Arn
   updateEmployee:
     handler: api.updateEmployee
     name: update-post
@@ -52,7 +52,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:UpdateItem"
-        Resource: !GetAtt PostsTable.Arn
+        Resource: !GetAtt employee-Table.Arn
   deleteEmployee:
     handler: api.deleteEmployee
     name: delete-post
@@ -66,7 +66,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:DeleteItem"
-        Resource: !GetAtt PostsTable.Arn
+        Resource: !GetAtt employee-Table.Arn
   getAllEmployee:
     handler: api.getAllEmployee
     name: get-all-posts
@@ -80,18 +80,18 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:Scan"
-        Resource: !GetAtt PostsTable.Arn
+        Resource: !GetAtt employee-Table.Arn
 resources:
   Resources:
-    PostsTable:
+    employee-Table:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.postsTableName}
+        TableName: employee-Table
         AttributeDefinitions:
-          - AttributeName: empId
+          - AttributeName: email
             AttributeType: S
         KeySchema:
-          - AttributeName: empId
+          - AttributeName: email
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
